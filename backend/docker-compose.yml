@@ -1,0 +1,7 @@
+services:
+  yummy-bot-3:
+    image: pischule/yummy-bot-3
+    restart: unless-stopped
+    volumes:
+      - './data:/usr/src/app/data'
+      - './config:/usr/src/app/config'
