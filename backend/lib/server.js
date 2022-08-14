@@ -1,4 +1,5 @@
 import express from 'express';
+import morgan from 'morgan';
 import {readMenu} from './storage.js';
 import {publishOrder} from './bot.js';
 import {checkTelgramAuthentication, weekDayToString} from './util.js';
@@ -17,6 +18,7 @@ function authorizationMiddleware(req, res, next) {
   }
 }
 
+app.use(morgan('combined'));
 app.use(authorizationMiddleware);
 
 app.get('/menu', async (_req, res, next) => {

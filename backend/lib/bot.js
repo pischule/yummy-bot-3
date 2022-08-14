@@ -16,9 +16,10 @@ const bot = new Telegraf(config.botToken);
 bot.use(adminOnlyMiddleware);
 
 bot.on('photo', async (ctx) => {
+  console.log('received photo');
   try {
     if (ctx.chat.id === config.ordersChat && !isOnTime()) {
-      console.log('received photo too late')
+      console.log('received photo too late');
       return;
     }
 
@@ -52,6 +53,7 @@ bot.on('photo', async (ctx) => {
     await saveObj('menu', {
       items, createDate, deliveryDate: deliveryDate,
     });
+    console.log('save new menu from photo');
 
     const button = {
       text: 'Создать заказ', login_url: {
@@ -72,6 +74,7 @@ bot.on('photo', async (ctx) => {
 });
 
 bot.command('rects', async (ctx) => {
+  console.log('rects called');
   try {
     const rects = await readObj('rects');
     const rectsString = util.rectsToString(rects);
@@ -83,6 +86,7 @@ bot.command('rects', async (ctx) => {
 });
 
 bot.hears(RECTS_REGEX, async (ctx) => {
+  console.log('heard rects regex');
   try {
     const receivedRectsString = ctx.message.text.match(RECTS_REGEX)[1];
     const rects = util.stringToRects(receivedRectsString);
@@ -95,6 +99,7 @@ bot.hears(RECTS_REGEX, async (ctx) => {
 });
 
 bot.command('menu', async (ctx) => {
+  console.log('menu called');
   try {
     const lines = ctx.message.text.split('\n');
     if (lines.length > 1) {
@@ -117,6 +122,7 @@ bot.command('menu', async (ctx) => {
 });
 
 bot.hears(DATE_REGEX, (ctx) => {
+  console.log('heard date regex');
   try {
     const dateString = ctx.message.text.match(DATE_REGEX)[1];
     const [day, month, year] = dateString.split('.');
@@ -126,7 +132,16 @@ bot.hears(DATE_REGEX, (ctx) => {
   }
 });
 
+bot.command('del', (ctx) => {
+  const reply = ctx.message?.reply_to_message;
+  if (!reply || reply.from.id !== ctx.botInfo.id) {
+    return;
+  }
+  ctx.deleteMessage(reply.message_id);
+})
+
 function publishOrder(order, userId) {
+  console.log('publish order', userId, order);
   try {
     const mention = `[${util.escapeMarkdown(
         order.name)}](tg://user?id=${userId})`;
@@ -154,7 +169,8 @@ function adminOnlyMiddleware(ctx, next) {
 
 function isOnTime() {
   const hourAtMinsk = util.convertTZ(new Date(), 'Europe/Minsk').getHours();
-  return config.acceptPhotoFromHour >= hourAtMinsk && hourAtMinsk < config.acceptPhotoToHour;
+  return config.acceptPhotoFromHour >= hourAtMinsk && hourAtMinsk <
+      config.acceptPhotoToHour;
 }
 
 export {publishOrder, bot};
