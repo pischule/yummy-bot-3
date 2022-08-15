@@ -1,11 +1,17 @@
 import express from 'express';
 import morgan from 'morgan';
+import cors from 'cors';
 import {readMenu} from './storage.js';
 import {publishOrder} from './bot.js';
 import {checkTelgramAuthentication, weekDayToString} from './util.js';
 
+const corsOptions = {
+  origin: ['https://y.pischule.xyz', 'http://dev.com:3000'],
+};
+
 const app = express();
 app.use(express.json());
+app.use(cors(corsOptions));
 
 const cache = new Set();
 

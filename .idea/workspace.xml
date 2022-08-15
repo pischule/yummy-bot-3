@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a0ab7adc-e84f-48c6-948a-fe5c32d94bec" name="Changes" comment="initial commit">
+    <list default="true" id="a0ab7adc-e84f-48c6-948a-fe5c32d94bec" name="Changes" comment="add request logging, add del command">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/lib/bot.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/lib/bot.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/lib/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/lib/server.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package.json" afterDir="false" />
@@ -16,6 +14,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -26,21 +25,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "javascript.nodejs.core.library.configured.version": "18.7.0",
-    "javascript.nodejs.core.library.typings.version": "18.7.0",
-    "last_opened_file_path": "/Users/maksim/Projects/yummy-bot-7/backend/config",
-    "nodejs.jest.jest_package": "/Users/maksim/Projects/yummy-bot-7/backend/node_modules/jest",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "ts.external.directory.path": "/Users/maksim/Library/Application Support/JetBrains/Toolbox/apps/WebStorm/ch-0/222.3345.108/WebStorm.app/Contents/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;18.7.0&quot;,
+    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;18.7.0&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/maksim/Projects/yummy-bot-7/backend/config&quot;,
+    &quot;nodejs.jest.jest_package&quot;: &quot;/Users/maksim/Projects/yummy-bot-7/backend/node_modules/jest&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/maksim/Library/Application Support/JetBrains/Toolbox/apps/WebStorm/ch-0/222.3345.108/WebStorm.app/Contents/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/backend/config" />
@@ -139,7 +138,8 @@
       <workItem from="1660114645063" duration="4720000" />
       <workItem from="1660376438276" duration="1000" />
       <workItem from="1660379608516" duration="6422000" />
-      <workItem from="1660508830658" duration="6253000" />
+      <workItem from="1660508830658" duration="6544000" />
+      <workItem from="1660549921346" duration="254000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <created>1660512686215</created>
@@ -148,7 +148,14 @@
       <option name="project" value="LOCAL" />
       <updated>1660512686215</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="add request logging, add del command">
+      <created>1660515373252</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1660515373252</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -167,6 +174,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="initial commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="initial commit" />
+    <MESSAGE value="add request logging, add del command" />
+    <option name="LAST_COMMIT_MESSAGE" value="add request logging, add del command" />
   </component>
 </project>
