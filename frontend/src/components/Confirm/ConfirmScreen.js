@@ -22,6 +22,43 @@ function ConfirmScreen(props) {
     return cyrillicPattern.test(name);
   };
 
+  const submitOrder = async () => {
+    try {
+      const requestData = {
+        name: name,
+        items: props.items.map((item) => {
+          const { id, ...itemWithoutId } = item;
+          return itemWithoutId;
+        }),
+      };
+
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/order${window.location.search}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Idempotency-Key": idempotencyKey,
+          },
+          body: JSON.stringify(requestData),
+        }
+      );
+
+      if (response.ok || response.status === 304) {
+        props.switchToDone();
+      } else {
+        throw new Error(response.status + "");
+      }
+    } catch (err) {
+      props.setError({
+        title: "Ошибка",
+        message: err.toString(),
+      });
+    } finally {
+      setPressed(false);
+    }
+  };
+
   const handleClick = () => {
     if (name == null || name === "") {
       props.setError({
@@ -40,38 +77,7 @@ function ConfirmScreen(props) {
 
     if (!pressed) {
       setPressed(true);
-
-      fetch(`${process.env.REACT_APP_API_URL}/order${window.location.search}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Idempotency-Key": idempotencyKey,
-        },
-        body: JSON.stringify({
-          name: name,
-          items: props.items,
-        }),
-      })
-        .then((response) => {
-          if (response.status === 200) {
-            props.switchToDone();
-          } else {
-            response.json().then((data) => {
-              props.setError({
-                title: "Ошибка",
-                message: data.error,
-              });
-            });
-          }
-          setPressed(false);
-        })
-        .catch((error) => {
-          props.setError({
-            title: "Ошибка",
-            message: error.toString(),
-          });
-          setPressed(false);
-        });
+      submitOrder();
     }
   };
 
@@ -89,7 +95,8 @@ function ConfirmScreen(props) {
         <ul>
           {props.items.map((item) => (
             <li key={item.id}>
-              {item.name} x{item.quantity}
+              {item.name}
+              {item.quantity === 1 ? "" : " x" + item.quantity}
             </li>
           ))}
         </ul>

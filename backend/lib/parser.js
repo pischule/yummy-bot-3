@@ -76,7 +76,7 @@ async function parseDocument(taskString, boxes) {
   return result
     .map((item) => item.match(itemRegex))
     .filter((match) => match)
-    .map(it => it[1])
+    .map((it) => it[1])
     .map((item) => item.trim().toLowerCase());
 }
 

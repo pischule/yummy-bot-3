@@ -1,5 +1,5 @@
 import fs from "fs";
-import { parseDocument } from "../lib/parser.js"
+import { parseDocument } from "../lib/parser.js";
 
 function loadTaskAndRects(date) {
   return {

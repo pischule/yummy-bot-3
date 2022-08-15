@@ -2,7 +2,10 @@ import { parseStringPromise } from "xml2js";
 import { config } from "../config/config.js";
 import { getBasicAuthorization, wait } from "./util.js";
 
-const authorization = getBasicAuthorization(config.abbyyUsername, config.abbyyPassword);
+const authorization = getBasicAuthorization(
+  config.abbyyUsername,
+  config.abbyyPassword
+);
 const BASE_URL = "https://cloud-eu.ocrsdk.com";
 const MAX_RETRIES = 5;
 

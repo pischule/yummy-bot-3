@@ -1,12 +1,12 @@
-import express from 'express';
-import morgan from 'morgan';
-import cors from 'cors';
-import {readMenu} from './storage.js';
-import {publishOrder} from './bot.js';
-import {checkTelgramAuthentication, weekDayToString} from './util.js';
+import express from "express";
+import morgan from "morgan";
+import cors from "cors";
+import { readMenu } from "./storage.js";
+import { publishOrder } from "./bot.js";
+import { checkTelgramAuthentication, weekDayToString } from "./util.js";
 
 const corsOptions = {
-  origin: ['https://y.pischule.xyz', 'http://dev.com:3000'],
+  origin: ["https://y.pischule.xyz", "http://dev.com:3000"],
 };
 
 const app = express();
@@ -24,10 +24,10 @@ function authorizationMiddleware(req, res, next) {
   }
 }
 
-app.use(morgan('combined'));
+app.use(morgan("combined"));
 app.use(authorizationMiddleware);
 
-app.get('/menu', async (_req, res, next) => {
+app.get("/menu", async (_req, res, next) => {
   try {
     let menu = await readMenu();
     if (menu === null) {
@@ -40,14 +40,15 @@ app.get('/menu', async (_req, res, next) => {
       title: `Меню на ${weekDayToString(menu.deliveryDate.getDay())}`,
     });
   } catch (err) {
+    console.error("/menu", err);
     next(err);
   }
 });
 
-app.post('/order', async (req, res, next) => {
-  const idempotencyKey = req.header('Idempotency-Key');
+app.post("/order", async (req, res, next) => {
+  const idempotencyKey = req.header("Idempotency-Key");
   if (cache.has(idempotencyKey)) {
-    return res.status(304).send('Not Modified');
+    return res.status(304).send("Not Modified");
   }
   try {
     await publishOrder(req.body, req.userId);
@@ -56,8 +57,9 @@ app.post('/order', async (req, res, next) => {
     }
     res.status(200).end();
   } catch (err) {
+    console.error("/order", err);
     next(err);
   }
 });
 
-export {app};
+export { app };

@@ -5,35 +5,42 @@ import { useState, useEffect } from "react";
 import MenuScreen from "./components/Menu/MenuScreen";
 import ConfirmScreen from "./components/Confirm/ConfirmScreen";
 import DoneScreen from "./components/DoneScreen/DoneScreen";
-import LoginScreen from "./components/Login/LoginScreen";
 import ErrorModal from "./components/UI/ErrorModal";
+import { nanoid } from "nanoid";
 
 function App() {
   const [screen, setScreen] = useState("menu");
   const [items, setItems] = useState([]);
-  const [title, setTitle] = useState("Меню не доступно");
+  const [title, setTitle] = useState("Загружаю...");
   const [error, setError] = useState();
 
   async function fetchData() {
-    const result = await fetch(`${process.env.REACT_APP_API_URL}/menu${window.location.search}`);
-    if (result.status === 404) {
-      return;
-    }
-    if (result.status === 403) {
-      setTitle('Ошибка авторизации');
-      return;
-    }
-    const json = await result.json();
-    let currentId = 0;
-    const itemsWithQuantity = json.items.map((item) => {
-      return {
-        id: currentId++,
+    try {
+      const result = await fetch(
+        `${process.env.REACT_APP_API_URL}/menu${window.location.search}`
+      );
+      if (!result.ok) {
+        if (result.status === 404) {
+          setTitle("Меню не доступно 🕳");
+        } else if (result.status === 403) {
+          setTitle("Ошибка авторизации");
+        } else {
+          setTitle(`Что-то пошло не так 😱`);
+        }
+        return;
+      }
+
+      const json = await result.json();
+      const itemsWithQuantity = json.items.map((item) => ({
+        id: nanoid(),
         name: item,
         quantity: 0,
-      };
-    });
-    setItems(itemsWithQuantity);
-    setTitle(json.title);
+      }));
+      setItems(itemsWithQuantity);
+      setTitle(json.title);
+    } catch (err) {
+      setTitle("Сервер недоступен 😭");
+    }
   }
 
   useEffect(() => {
@@ -57,7 +64,11 @@ function App() {
       }
       let randomIndex = Math.floor(Math.random() * notSelected.length);
       let randomId = notSelected[randomIndex].id;
-      return prevItems.map((itm) => itm.id === randomId ? ({...itm, quantity: itm.quantity + 1}) : ({...itm}));
+      return prevItems.map((itm) =>
+        itm.id === randomId
+          ? { ...itm, quantity: itm.quantity + 1 }
+          : { ...itm }
+      );
     });
   };
 
@@ -80,18 +91,6 @@ function App() {
   const switchToDone = () => {
     setScreen("done");
   };
-
-  const params = new Proxy(new URLSearchParams(window.location.search), {
-    get: (searchParams, prop) => searchParams.get(prop),
-  });
-  const id = params.id;
-  if (id === null || id === undefined) {
-    return (
-      <div className={styles.app}>
-        <LoginScreen />
-      </div>
-    );
-  }
 
   const selectedItems = items.filter((item) => item.quantity > 0);
 

@@ -4,7 +4,7 @@ import {
   getBasicAuthorization,
   convertTZ,
   escapeMarkdown,
-} from '../lib/util.js';
+} from "../lib/util.js";
 
 describe("rects-string converter", () => {
   it("convert to and back", () => {
@@ -52,25 +52,28 @@ describe("basic auth util", () => {
   });
 });
 
-describe('convertTZ', () => {
+describe("convertTZ", () => {
   it("shows correct hour at minsk", () => {
-    const dateAtMinsk = convertTZ(new Date(Date.UTC(2022, 7, 9, 19)), 'Europe/Minsk');
+    const dateAtMinsk = convertTZ(
+      new Date(Date.UTC(2022, 7, 9, 19)),
+      "Europe/Minsk"
+    );
 
     expect(dateAtMinsk.getHours()).toEqual(22);
-  })
+  });
 });
 
-describe('escapeMarkdown', () => {
-  it('doesnt change regular text', () => {
-    const result = escapeMarkdown('hello world');
+describe("escapeMarkdown", () => {
+  it("doesnt change regular text", () => {
+    const result = escapeMarkdown("hello world");
 
-    expect(result).toEqual('hello world');
-  })
+    expect(result).toEqual("hello world");
+  });
 
-  it('escapes special characters', () => {
+  it("escapes special characters", () => {
     const specialCharacters = "_*[]()~`>#+-=|{}.!";
     const result = escapeMarkdown(specialCharacters);
 
     expect(result).toHaveLength(specialCharacters.length * 2);
-  })
-})
+  });
+});

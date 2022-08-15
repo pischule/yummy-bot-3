@@ -1,11 +1,11 @@
-import fs from 'fs/promises';
+import fs from "fs/promises";
 
 async function readObj(name) {
   try {
-    const data = await fs.readFile(`data/${name}.json`, 'utf8');
+    const data = await fs.readFile(`data/${name}.json`, "utf8");
     return JSON.parse(data);
   } catch (err) {
-    if (err.code === 'ENOENT') {
+    if (err.code === "ENOENT") {
       return null;
     } else {
       throw err;
@@ -18,7 +18,7 @@ function saveObj(name, obj) {
 }
 
 async function readMenu() {
-  const menu = await readObj('menu');
+  const menu = await readObj("menu");
   if (menu === null || menu.items.length === 0) {
     return null;
   }
@@ -34,4 +34,4 @@ async function readMenu() {
   return menu;
 }
 
-export {readObj, saveObj, readMenu};
+export { readObj, saveObj, readMenu };
