@@ -1,0 +1,17 @@
+.button {
+  background-color: var(--button-color);
+  border: none;
+  border: 0;
+  padding: 0;
+  color: var(--button-text-color);
+  border-radius: 0.5rem;
+  height: 2rem;
+  cursor: pointer;
+  width: 6rem;
+}
+
+@media (hover: hover) {
+  .button:hover {
+    background-color: var(--button-hover-color);
+  }
+}
