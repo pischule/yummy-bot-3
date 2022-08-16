@@ -183,7 +183,7 @@ function adminOnlyMiddleware(ctx, next) {
 function isOnTime() {
   const hourAtMinsk = util.convertTZ(new Date(), "Europe/Minsk").getHours();
   return (
-    config.acceptPhotoFromHour >= hourAtMinsk &&
+    config.acceptPhotoFromHour <= hourAtMinsk &&
     hourAtMinsk < config.acceptPhotoToHour
   );
 }
