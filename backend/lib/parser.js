@@ -72,11 +72,12 @@ async function parseDocument(taskString, boxes) {
   }
 
   // postprocessing
-  const itemRegex = /^(.*?)(\(.*)?$/;
+  const itemRegex = /^(.{3,}?)(\(.*)?$/;
   return result
     .map((item) => item.match(itemRegex))
     .filter((match) => match)
     .map((it) => it[1])
+    .map((item) => item.replaceAll("^", ".."))
     .map((item) => item.trim().toLowerCase());
 }
 
