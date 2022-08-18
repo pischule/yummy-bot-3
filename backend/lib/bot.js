@@ -104,7 +104,7 @@ bot.command("menu", async (ctx) => {
     }
 
     const menu = await readMenu();
-    ctx.reply("/menu\n" + menu.items.join("\n"));
+    ctx.reply("/menu\n" + (menu?.items?.join("\n") ?? ''));
   } catch (err) {
     console.error(err);
     ctx.reply(`error: ${err}`);
@@ -175,7 +175,7 @@ function publishOrder(order, userId) {
 }
 
 function adminOnlyMiddleware(ctx, next) {
-  if (config.admins.includes(ctx.message.from.id)) {
+  if (config.admins.includes(ctx.message?.from?.id)) {
     next();
   }
 }
