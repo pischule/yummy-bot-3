@@ -2,9 +2,9 @@ FROM node:18-alpine
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
+COPY package.json yarn.lock ./
 
-RUN npm ci --only=production
+RUN yarn install --production
 
 COPY . .
 
