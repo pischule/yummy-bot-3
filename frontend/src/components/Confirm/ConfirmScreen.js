@@ -32,8 +32,9 @@ function ConfirmScreen(props) {
         }),
       };
 
+      const initData = window.Telegram.WebApp.initData || window.location.search;
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/order${window.location.search}`,
+        `${process.env.REACT_APP_API_URL}/order${initData}`,
         {
           method: "POST",
           headers: {

@@ -16,8 +16,9 @@ function App() {
 
   async function fetchData() {
     try {
+      const initData = window.Telegram.WebApp.initData || window.location.search;
       const result = await fetch(
-        `${process.env.REACT_APP_API_URL}/menu${window.location.search}`
+        `${process.env.REACT_APP_API_URL}/menu${initData}`
       );
       if (!result.ok) {
         if (result.status === 404) {
