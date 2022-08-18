@@ -16,7 +16,8 @@ function App() {
 
   async function fetchData() {
     try {
-      const initData = window.Telegram.WebApp.initData || window.location.search;
+      let initData = window.Telegram.WebApp.initData;
+      initData = initData ? '?' + initData : window.location.search;
       const result = await fetch(
         `${process.env.REACT_APP_API_URL}/menu${initData}`
       );
