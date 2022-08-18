@@ -3,7 +3,11 @@ import morgan from "morgan";
 import cors from "cors";
 import { readMenu } from "./storage.js";
 import { publishOrder } from "./bot.js";
-import { checkTelgramAuthentication, weekDayToString } from "./util.js";
+import {
+  checkTelegramAuthentication,
+  checkTelegramAuthenticationWebAppData,
+  weekDayToString,
+} from "./util.js";
 
 const corsOptions = {
   origin: ["https://y.pischule.xyz", "http://dev.com:3000"],
@@ -16,7 +20,11 @@ app.use(cors(corsOptions));
 const cache = new Set();
 
 function authorizationMiddleware(req, res, next) {
-  if (checkTelgramAuthentication(req.query)) {
+  if (req.query.query_id && checkTelegramAuthenticationWebAppData(req.query)) {
+    const user = JSON.parse(req.query.user);
+    req.userId = user.id;
+    next();
+  } else if (checkTelegramAuthentication(req.query)) {
     req.userId = req.query.id;
     next();
   } else {

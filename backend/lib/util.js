@@ -17,8 +17,25 @@ function rectsToString(rects) {
     .join(".");
 }
 
-function checkTelgramAuthentication({ hash, ...userData }) {
+function checkTelegramAuthentication({ hash, ...userData }) {
   const secretKey = createHash("sha256").update(config.botToken).digest();
+
+  const dataCheckString = Object.keys(userData)
+    .sort()
+    .map((key) => `${key}=${userData[key]}`)
+    .join("\n");
+
+  const hmac = createHmac("sha256", secretKey)
+    .update(dataCheckString)
+    .digest("hex");
+
+  return hmac === hash;
+}
+
+function checkTelegramAuthenticationWebAppData({ hash, ...userData }) {
+  const secretKey = createHmac("sha256", "WebAppData")
+    .update(config.botToken)
+    .digest();
 
   const dataCheckString = Object.keys(userData)
     .sort()
@@ -70,7 +87,8 @@ export {
   getBasicAuthorization,
   stringToRects,
   rectsToString,
-  checkTelgramAuthentication,
+  checkTelegramAuthentication,
+  checkTelegramAuthenticationWebAppData,
   convertTZ,
   escapeMarkdown,
   weekDayToString,
