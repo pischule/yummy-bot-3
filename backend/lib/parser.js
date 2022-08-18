@@ -9,65 +9,49 @@ async function parseDocument(taskString, boxes) {
 
   const width = page.$.width;
   const height = page.$.height;
-
-  const scaledBoxes = boxes.map((b) => ({
-    l: b.l * width,
-    t: b.t * height,
-    r: b.r * width,
-    b: b.b * height,
-  }));
+  const scaledBoxes = scaleBoxes(boxes, width, height);
 
   let lines = page.block
     .filter((block) => block.$.blockType === "Text")
     .flatMap((block) => block.text)
     .flatMap((text) => text.par)
     .filter((par) => par)
-    .flatMap((par) => par.line)
-    .filter((line) => line?.formatting?.[0].charParams);
+    .flatMap((par) => par.line);
 
-  let charHeights = [];
-  let allText = lines
-    .map((line) => {
-      let lineBoxIndex = boxIndex(nodeCenter(line), scaledBoxes);
-      let formatting = line.formatting[0];
-
-      let lineText = formatting.charParams
-        .filter(
-          (charParam) =>
-            boxIndex(nodeCenter(charParam), scaledBoxes) === lineBoxIndex
-        )
-        .map((charParam) => charParam._ ?? " ")
-        .join("");
-
-      charHeights.push(
-        _.mean(line.formatting[0].charParams.map((p) => p.$.b - p.$.t))
-      );
-
-      return {
-        text: lineText,
-        x: line.$.l,
-        y: line.$.baseline,
-        lineBoxIndex,
-      };
+  let chars = lines
+    .flatMap((line) => {
+      const baseline = line.$.baseline;
+      return line.formatting
+        .flatMap((formatting) => formatting.charParams)
+        .map((c) => {
+          c.box = boxIndex(nodeCenter(c), scaledBoxes);
+          c.baseline = baseline;
+          return c;
+        });
     })
-    .filter((line) => line.lineBoxIndex > -1);
+    .filter((char) => char.box >= 0);
 
-  let averageCharHeight = _.mean(charHeights);
-  let textBoxes = _.groupBy(allText, (e) => e.lineBoxIndex);
+  let charHeight = _.mean(chars.map((c) => c.$.b - c.$.t));
+  let charsGrouppedByBoxes = _.groupBy(chars, (e) => e.box);
 
   let result = [];
-  for (let boxLines of Object.values(textBoxes)) {
-    let blockItems = groupByScore(
-      boxLines,
-      (it) => it.y,
-      averageCharHeight * 2
-    );
-    for (let block of blockItems) {
-      let linesText = groupByScore(block, (it) => it.y, averageCharHeight * 0.8)
-        .flatMap((wordGroup) => wordGroup)
-        .map((wordGroup) => wordGroup.text)
+  for (let boxChars of Object.values(charsGrouppedByBoxes)) {
+    let boxItems = groupByScore(boxChars, (it) => it.baseline, charHeight * 2);
+
+    for (let item of boxItems) {
+      let lines = groupByScore(item, (c) => c.baseline, charHeight * 0.8);
+
+      let itemText = lines
+        .map((line) =>
+          line
+            .sort((a, b) => a.$.l - b.$.l)
+            .map((c) => c._)
+            .map((c) => c || " ")
+            .join("")
+        )
         .join(" ");
-      result.push(linesText);
+
+      result.push(itemText);
     }
   }
 
@@ -79,6 +63,15 @@ async function parseDocument(taskString, boxes) {
     .map((it) => it[1])
     .map((item) => item.replaceAll("^", ".."))
     .map((item) => item.trim().toLowerCase());
+}
+
+function scaleBoxes(boxes, width, height) {
+  return boxes.map((b) => ({
+    l: b.l * width,
+    t: b.t * height,
+    r: b.r * width,
+    b: b.b * height,
+  }));
 }
 
 function boxContains(box, point) {

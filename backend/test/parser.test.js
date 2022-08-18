@@ -1,16 +1,13 @@
 import fs from "fs";
 import { parseDocument } from "../lib/parser.js";
-
-function loadTaskAndRects(date) {
-  return {
-    task: fs.readFileSync(`test/task/${date}-task.xml`, "utf-8"),
-    rects: JSON.parse(fs.readFileSync(`test/task/${date}-rects.json`, "utf-8")),
-  };
-}
+import { stringToRects } from "../lib/util.js";
 
 describe("abbyy task response parser", () => {
   it("it correctly parses 0807", async () => {
-    const { task, rects } = loadTaskAndRects("0807");
+    const task = loadTask("0807");
+    const rects = stringToRects(
+      "116.413.440.524.505.414.814.528.142.571.442.674.509.568.810.674.137.711.464.825.513.711.802.828"
+    );
 
     let items = await parseDocument(task, rects);
 
@@ -23,7 +20,7 @@ describe("abbyy task response parser", () => {
       "рис с весенними овощами",
       "спагетти с маслом и зеленью",
       "рыбная котлета с зеленью",
-      "ножка куриная фаршированная  шампиньонами",
+      "ножка куриная фаршированная шампиньонами",
       "нагеттсы из филе птицы",
       "шницель «полесский»",
       "жаркое по-домашнему со свининой",
@@ -31,7 +28,10 @@ describe("abbyy task response parser", () => {
   });
 
   it("it correctly parses 0508", async () => {
-    const { task, rects } = loadTaskAndRects("0508");
+    const task = loadTask("0508");
+    const rects = stringToRects(
+      "116.413.440.524.505.414.814.528.142.571.442.674.509.568.810.674.137.711.464.825.513.711.802.828"
+    );
 
     let items = await parseDocument(task, rects);
 
@@ -51,7 +51,10 @@ describe("abbyy task response parser", () => {
   });
 
   it("it correctly parses 1608", async () => {
-    const { task, rects } = loadTaskAndRects("1608");
+    const task = loadTask("1608");
+    const rects = stringToRects(
+      "116.413.440.524.505.414.814.528.142.571.442.674.509.568.810.674.137.711.464.825.513.711.802.828"
+    );
 
     let items = await parseDocument(task, rects);
 
@@ -69,4 +72,32 @@ describe("abbyy task response parser", () => {
       "котлета «киевская»",
     ]);
   });
+
+  it("it correctly parses 1808", async () => {
+    const task = loadTask("1808");
+    const rects = stringToRects(
+      "116.413.440.524.505.414.814.528.142.571.442.674.509.568.810.674.137.711.464.825.513.711.802.828"
+    );
+
+    let items = await parseDocument(task, rects);
+
+    expect(items).toEqual([
+      "салат из квашеной капусты",
+      "салат «пекинский»",
+      "салат с курицей и свеклой",
+      "бо..холодный со сметаной",
+      "гречневая с морковью",
+      "картофель тушеный со сметаной",
+      "спагетти с соусом болоньезе",
+      "драники по-домашнему",
+      "жареная рыба под маринадом",
+      "биточек по-белорусски",
+      "филе птицы с ананасом",
+      "жульен из птицы в тарталетке",
+    ]);
+  });
 });
+
+function loadTask(date) {
+  return fs.readFileSync(`test/task/${date}-task.xml`, "utf-8");
+}
