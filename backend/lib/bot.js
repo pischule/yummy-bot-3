@@ -141,14 +141,9 @@ function publishButton(ctx) {
       url: config.appUrl,
     },
   };
-  const webAppButton = {
-    text: "🆕",
-    web_app: { url: config.appUrl },
-    hide: false,
-  };
   ctx.reply("Нажмите на кнопку ниже, чтобы создать заказ", {
     reply_markup: {
-      inline_keyboard: [[button, webAppButton]],
+      inline_keyboard: [[button]],
     },
   });
 }
