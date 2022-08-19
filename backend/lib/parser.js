@@ -14,9 +14,11 @@ async function parseDocument(taskString, boxes) {
   let lines = page.block
     .filter((block) => block.$.blockType === "Text")
     .flatMap((block) => block.text)
+    .filter((text) => text)
     .flatMap((text) => text.par)
     .filter((par) => par)
-    .flatMap((par) => par.line);
+    .flatMap((par) => par.line)
+    .filter((line) => line);
 
   let chars = lines
     .flatMap((line) => {
@@ -61,7 +63,6 @@ async function parseDocument(taskString, boxes) {
     .map((item) => item.match(itemRegex))
     .filter((match) => match)
     .map((it) => it[1])
-    .map((item) => item.replaceAll("^", ".."))
     .map((item) => item.trim().toLowerCase());
 }
 
