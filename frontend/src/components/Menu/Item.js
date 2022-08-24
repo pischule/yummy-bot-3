@@ -1,5 +1,5 @@
 import AddItemControls from "./AddControls";
-import { Badge, Box, Flex, Spacer, Center } from "@chakra-ui/react";
+import { Badge, Box, Flex, Spacer, Center, Circle } from "@chakra-ui/react";
 
 function Item(props) {
   const updateQuantity = (quantity) => {
@@ -8,20 +8,15 @@ function Item(props) {
 
   return (
     <Flex width="100%">
-      <Box>{props.name}</Box>
+      <Center>{props.name}</Center>
       <Spacer />
-
       {props.quantity > 0 ? (
         <Center>
-          <Badge
-            mx="8px"
-            boxSize="22px"
-            alignItems="center"
-            borderRadius="full"
-            textAlign="center"
-          >
+          <Circle w="22px" h="22px" mx="8px" bg='teal' color="white" >
+            <Box as="span" fontWeight="bold" fontSize='sm'>
             {props.quantity}
-          </Badge>
+            </Box>
+          </Circle>
         </Center>
       ) : null}
       <AddItemControls

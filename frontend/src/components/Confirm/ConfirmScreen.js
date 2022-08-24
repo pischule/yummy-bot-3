@@ -88,7 +88,7 @@ function ConfirmScreen(props) {
   };
 
   return (
-    <Box>
+    <>
       <Heading>Ваш заказ:</Heading>
       <Input
         mt='20px'
@@ -109,7 +109,7 @@ function ConfirmScreen(props) {
       <Button width="100%" size="lg" onClick={handleClick} colorScheme='teal'>
         Отправить
       </Button>
-    </Box>
+    </>
   );
 }
 
