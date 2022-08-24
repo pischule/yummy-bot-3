@@ -1,5 +1,3 @@
-import styles from "./App.module.css";
-
 import { useState, useEffect } from "react";
 
 import MenuScreen from "./components/Menu/MenuScreen";
@@ -7,17 +5,18 @@ import ConfirmScreen from "./components/Confirm/ConfirmScreen";
 import DoneScreen from "./components/DoneScreen/DoneScreen";
 import ErrorModal from "./components/UI/ErrorModal";
 import { nanoid } from "nanoid";
+import { Container } from "@chakra-ui/react";
 
 function App() {
   const [screen, setScreen] = useState("menu");
   const [items, setItems] = useState([]);
   const [title, setTitle] = useState("Загружаю...");
-  const [error, setError] = useState();
+  const [error, setError] = useState(null);
 
   async function fetchData() {
     try {
       let initData = window.Telegram.WebApp.initData;
-      initData = initData ? '?' + initData : window.location.search;
+      initData = initData ? "?" + initData : window.location.search;
       const result = await fetch(
         `${process.env.REACT_APP_API_URL}/menu${initData}`
       );
@@ -74,10 +73,6 @@ function App() {
     });
   };
 
-  const errorHandler = () => {
-    setError(null);
-  };
-
   const switchToConfirem = () => {
     const selectedItems = items.filter((item) => item.quantity > 0);
     if (selectedItems.length > 0) {
@@ -97,14 +92,8 @@ function App() {
   const selectedItems = items.filter((item) => item.quantity > 0);
 
   return (
-    <div className={styles.app}>
-      {error && (
-        <ErrorModal
-          title={error.title}
-          message={error.message}
-          onConfirm={errorHandler}
-        />
-      )}
+    <Container my="20px">
+      {error && <ErrorModal error={error} onClose={() => setError(null)} />}
       {screen === "menu" && (
         <MenuScreen
           updateQuantity={updateQuantity}
@@ -122,7 +111,7 @@ function App() {
         />
       )}
       {screen === "done" && <DoneScreen />}
-    </div>
+    </Container>
   );
 }
 

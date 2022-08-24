@@ -1,9 +1,10 @@
+import { StackDivider, VStack } from "@chakra-ui/react";
 import Item from "./Item";
 
 function ItemList(props) {
 
   return (
-    <div className="items-list">
+    <VStack my={4} divider={<StackDivider/>}>
       {props.items.map((item) => (
         <Item
           key={item.id}
@@ -13,7 +14,7 @@ function ItemList(props) {
           updateQuantity={props.updateQuantity}
         />
       ))}
-    </div>
+    </VStack>
   );
 }
 

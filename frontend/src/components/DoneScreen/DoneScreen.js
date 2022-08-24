@@ -1,9 +1,7 @@
+import { Heading } from "@chakra-ui/react";
+
 function DoneScreen() {
-  return (
-    <div className="done-screen">
-      <h1>Заказ создан 👌</h1>
-    </div>
-  );
+  return <Heading>Заказ создан 👌</Heading>;
 }
 
 export default DoneScreen;

@@ -1,6 +1,5 @@
-import styles from "./Item.module.css";
-
 import AddItemControls from "./AddControls";
+import { Badge, Box, Flex, Spacer, Center } from "@chakra-ui/react";
 
 function Item(props) {
   const updateQuantity = (quantity) => {
@@ -8,16 +7,28 @@ function Item(props) {
   };
 
   return (
-    <div className={styles.item}>
-      <div className={styles["item-name"]}>{props.name}</div>
+    <Flex width="100%">
+      <Box>{props.name}</Box>
+      <Spacer />
+
       {props.quantity > 0 ? (
-        <div className={styles["item-quantity"]}>{props.quantity}</div>
+        <Center>
+          <Badge
+            mx="8px"
+            boxSize="22px"
+            alignItems="center"
+            borderRadius="full"
+            textAlign="center"
+          >
+            {props.quantity}
+          </Badge>
+        </Center>
       ) : null}
       <AddItemControls
         updateQuantity={updateQuantity}
         quantity={props.quantity}
       />
-    </div>
+    </Flex>
   );
 }
 

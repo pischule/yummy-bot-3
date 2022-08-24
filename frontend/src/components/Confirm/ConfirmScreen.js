@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { nanoid } from "nanoid";
 
-import styles from "./ConfirmScreen.module.css";
-
-import LargeButton from "../UI/LargeButton";
-import Card from "../UI/Card";
+import {
+  Box,
+  Button,
+  Heading,
+  Input,
+  ListItem,
+  UnorderedList,
+} from "@chakra-ui/react";
 
 function ConfirmScreen(props) {
   const [idempotencyKey] = useState(nanoid());
@@ -33,7 +37,7 @@ function ConfirmScreen(props) {
       };
 
       let initData = window.Telegram.WebApp.initData;
-      initData = initData ? '?' + initData : window.location.search;
+      initData = initData ? "?" + initData : window.location.search;
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}/order${initData}`,
         {
@@ -84,28 +88,28 @@ function ConfirmScreen(props) {
   };
 
   return (
-    <div>
-      <h1 className={styles.h2}>Ваш заказ:</h1>
-      <Card>
-        <input
-          id="nameInput"
-          value={name}
-          onChange={handleNameChange}
-          className={styles.input}
-          placeholder="Введите ваше имя"
-        />
-        <ul>
-          {props.items.map((item) => (
-            <li key={item.id}>
-              {item.name}
-              {item.quantity === 1 ? "" : " x" + item.quantity}
-            </li>
-          ))}
-        </ul>
-      </Card>
+    <Box>
+      <Heading>Ваш заказ:</Heading>
+      <Input
+        mt='20px'
+        id="nameInput"
+        value={name}
+        onChange={handleNameChange}
+        placeholder="Введите ваше имя"
+      ></Input>
+      <UnorderedList my={6}>
+        {props.items.map((item) => (
+          <ListItem key={item.id}>
+            {item.name}
+            {item.quantity === 1 ? "" : " x" + item.quantity}
+          </ListItem>
+        ))}
+      </UnorderedList>
 
-      <LargeButton onClick={handleClick}>Отправить</LargeButton>
-    </div>
+      <Button width="100%" size="lg" onClick={handleClick} colorScheme='teal'>
+        Отправить
+      </Button>
+    </Box>
   );
 }
 

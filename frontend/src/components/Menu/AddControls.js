@@ -1,4 +1,4 @@
-import styles from "./AddItemControls.module.css";
+import { Button, ButtonGroup } from "@chakra-ui/react";
 
 function AddItemControls(props) {
   const quantity = props.quantity;
@@ -11,33 +11,22 @@ function AddItemControls(props) {
     props.updateQuantity(quantity - 1);
   };
 
-  if (quantity === 0) {
-    return (
-      <button
-        className={`${styles["add-button"]} ${styles.button}`}
-        onClick={increment}
-      >
-        Добавить
-      </button>
-    );
-  } else {
-    return (
-      <>
-        <button
-          className={`${styles["pm-button"]} ${styles.button}`}
-          onClick={decrement}
-        >
-          -
-        </button>
-        <button
-          className={`${styles["pm-button"]} ${styles.button}`}
-          onClick={increment}
-        >
-          +
-        </button>
-      </>
-    );
-  }
+  return (
+    <ButtonGroup w="90px" size="sm">
+      {quantity === 0 ? (
+        <Button onClick={increment}>Добавить</Button>
+      ) : (
+        <>
+          <Button width="50%" onClick={decrement}>
+            -
+          </Button>
+          <Button width="50%" onClick={increment}>
+            +
+          </Button>
+        </>
+      )}
+    </ButtonGroup>
+  );
 }
 
 export default AddItemControls;
