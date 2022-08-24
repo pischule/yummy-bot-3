@@ -1,4 +1,4 @@
-import { Button, ButtonGroup } from "@chakra-ui/react";
+import { Button, ButtonGroup, Center, IconButton } from "@chakra-ui/react";
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 
 function AddItemControls(props) {
@@ -13,20 +13,28 @@ function AddItemControls(props) {
   };
 
   return (
-    <ButtonGroup w="90px" size="sm">
-      {quantity === 0 ? (
-        <Button onClick={increment}>Добавить</Button>
-      ) : (
-        <>
-          <Button width="50%" onClick={decrement}>
-            <MinusIcon />
-          </Button>
-          <Button width="50%" onClick={increment}>
-            <AddIcon />
-          </Button>
-        </>
-      )}
-    </ButtonGroup>
+    <Center>
+      <ButtonGroup w="90px" size="sm">
+        {quantity === 0 ? (
+          <Button onClick={increment}>Добавить</Button>
+        ) : (
+          <>
+            <IconButton
+              width="50%"
+              aria-label="add-item"
+              icon={<MinusIcon />}
+              onClick={decrement}
+            />
+            <IconButton
+              width="50%"
+              aria-label="remove-item"
+              icon={<AddIcon />}
+              onClick={increment}
+            />
+          </>
+        )}
+      </ButtonGroup>
+    </Center>
   );
 }
 
