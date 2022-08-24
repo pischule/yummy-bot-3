@@ -2,7 +2,6 @@ import { useState } from "react";
 import { nanoid } from "nanoid";
 
 import {
-  Box,
   Button,
   Heading,
   Input,
