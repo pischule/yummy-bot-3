@@ -22,7 +22,7 @@ function App() {
       );
       if (!result.ok) {
         if (result.status === 404) {
-          setTitle("Меню не доступно 🕳");
+          setTitle("Меню не доступно");
         } else if (result.status === 403) {
           setTitle("Ошибка авторизации");
         } else {
