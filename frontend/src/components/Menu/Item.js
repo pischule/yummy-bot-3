@@ -8,17 +8,24 @@ function Item(props) {
 
   return (
     <Flex width="100%">
-      <Center mr='4px' as="span">{props.name}</Center>
+      <Center as="span">
+        {props.name}
+      </Center>
       <Spacer />
-      {props.quantity > 0 ? (
-        <Center>
-          <Circle w="22px" h="22px" mx="8px" bg="teal" color="white">
-            <Box as="span" fontWeight="bold" fontSize="sm">
-              {props.quantity}
-            </Box>
-          </Circle>
-        </Center>
-      ) : null}
+      <Center>
+        <Circle
+          visibility={props.quantity === 0 ? 'hidden' : 'visible'}
+          w="22px"
+          h="22px"
+          mx="8px"
+          bg="teal"
+          color="white"
+        >
+          <Box as="span" fontWeight="bold" fontSize="sm">
+            {props.quantity}
+          </Box>
+        </Circle>
+      </Center>
       <AddItemControls
         updateQuantity={updateQuantity}
         quantity={props.quantity}
