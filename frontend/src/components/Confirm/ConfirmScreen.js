@@ -93,7 +93,7 @@ function ConfirmScreen(props) {
           onChange={handleNameInputChange}
           value={name}
         ></Input>
-        {nameError ? <FormErrorMessage>{nameError}</FormErrorMessage> : null}
+        {nameError && <FormErrorMessage>{nameError}</FormErrorMessage>}
       </FormControl>
 
       <UnorderedList my={6}>
