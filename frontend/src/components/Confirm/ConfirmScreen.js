@@ -77,12 +77,6 @@ function ConfirmScreen(props) {
 
   const nameError = validateName(name);
 
-  const handleClick = () => {
-    if (!loading) {
-      submitOrder();
-    }
-  };
-
   return (
     <>
       <Heading>Ваш заказ:</Heading>
@@ -105,12 +99,12 @@ function ConfirmScreen(props) {
         ))}
       </UnorderedList>
       <Button
-        disabled={nameError}
+        disabled={loading || nameError}
         isLoading={loading}
         loadingText="Отправляю"
         width="100%"
         size="lg"
-        onClick={handleClick}
+        onClick={submitOrder}
         colorScheme="teal"
       >
         Отправить
