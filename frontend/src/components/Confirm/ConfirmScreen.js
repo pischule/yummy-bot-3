@@ -3,40 +3,51 @@ import { nanoid } from "nanoid";
 
 import {
   Button,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
   Heading,
   Input,
   ListItem,
   UnorderedList,
 } from "@chakra-ui/react";
 
+const CYRILLIC_NAME_PATTERN = /^[\u0400-\u04FF ]{2,}/;
+
 function ConfirmScreen(props) {
   const [idempotencyKey] = useState(nanoid());
-  const [name, setName] = useState(localStorage.getItem("name") || null);
-  const [pressed, setPressed] = useState(false);
+  const [name, setName] = useState(localStorage.getItem("name") || "");
+  const [loading, setLoading] = useState(false);
 
-  const handleNameChange = (event) => {
+  const handleNameInputChange = (event) => {
     const newName = event.target.value;
     setName(newName);
     localStorage.setItem("name", newName);
   };
 
-  const isNameValid = (name) => {
-    const cyrillicPattern = /^[\u0400-\u04FF ]{2,}/;
-    return cyrillicPattern.test(name);
+  const validateName = (name) => {
+    let error;
+    if (name.length < 2) {
+      error = "Укажите имя";
+    } else if (!CYRILLIC_NAME_PATTERN.test(name)) {
+      error = "Имя может содержать только кириллицу";
+    }
+    return error;
   };
 
   const submitOrder = async () => {
     try {
       const requestData = {
-        name: name,
+        name,
         items: props.items.map((item) => {
-          const { id, ...itemWithoutId } = item;
-          return itemWithoutId;
+          const { id, ...otherFields } = item;
+          return otherFields;
         }),
       };
 
       let initData = window.Telegram.WebApp.initData;
       initData = initData ? "?" + initData : window.location.search;
+      setLoading(true);
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}/order${initData}`,
         {
@@ -60,28 +71,14 @@ function ConfirmScreen(props) {
         message: err.toString(),
       });
     } finally {
-      setPressed(false);
+      setLoading(false);
     }
   };
 
-  const handleClick = () => {
-    if (name == null || name === "") {
-      props.setError({
-        title: "Ошибка",
-        message: "введите имя",
-      });
-      return;
-    }
-    if (!isNameValid(name)) {
-      props.setError({
-        title: "Ошибка",
-        message: "имя может содержать только кириллицу",
-      });
-      return;
-    }
+  const nameError = validateName(name);
 
-    if (!pressed) {
-      setPressed(true);
+  const handleClick = () => {
+    if (!loading) {
       submitOrder();
     }
   };
@@ -89,13 +86,16 @@ function ConfirmScreen(props) {
   return (
     <>
       <Heading>Ваш заказ:</Heading>
-      <Input
-        mt='20px'
-        id="nameInput"
-        value={name}
-        onChange={handleNameChange}
-        placeholder="Введите ваше имя"
-      ></Input>
+      <FormControl isInvalid={nameError} mt="30px">
+        <FormLabel>Имя</FormLabel>
+        <Input
+          placeholder="Введите ваше имя"
+          onChange={handleNameInputChange}
+          value={name}
+        ></Input>
+        {nameError ? <FormErrorMessage>{nameError}</FormErrorMessage> : null}
+      </FormControl>
+
       <UnorderedList my={6}>
         {props.items.map((item) => (
           <ListItem key={item.id}>
@@ -104,8 +104,15 @@ function ConfirmScreen(props) {
           </ListItem>
         ))}
       </UnorderedList>
-
-      <Button width="100%" size="lg" onClick={handleClick} colorScheme='teal'>
+      <Button
+        disabled={nameError}
+        isLoading={loading}
+        loadingText="Отправляю"
+        width="100%"
+        size="lg"
+        onClick={handleClick}
+        colorScheme="teal"
+      >
         Отправить
       </Button>
     </>
