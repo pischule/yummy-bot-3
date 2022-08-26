@@ -4,11 +4,10 @@
 
 Бот полчает фото, парсит, отправляет кнопку в чат. Перейдя по кнопке, можно собрать заказ.
 
+<img width="330" alt="image" src="https://user-images.githubusercontent.com/41614960/186944391-0ad8c188-d8c7-424c-9f0b-57cb6478e355.jpg">
+
 <table>
  <tr>
-  <td> 
-   <img width="330" alt="image" src="https://user-images.githubusercontent.com/41614960/186944391-0ad8c188-d8c7-424c-9f0b-57cb6478e355.jpg">
-  </td>
   <td> 
    <img src="https://user-images.githubusercontent.com/41614960/186943976-cdafdb00-e21d-48c2-9fe4-f0b44ce15368.jpg" width="330">
   </td>
