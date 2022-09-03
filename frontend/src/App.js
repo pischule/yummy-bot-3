@@ -4,7 +4,6 @@ import MenuScreen from "./components/Menu/MenuScreen";
 import ConfirmScreen from "./components/Confirm/ConfirmScreen";
 import DoneScreen from "./components/DoneScreen/DoneScreen";
 import ErrorModal from "./components/UI/ErrorModal";
-import { nanoid } from "nanoid";
 import { Container } from "@chakra-ui/react";
 
 function App() {
@@ -32,8 +31,8 @@ function App() {
       }
 
       const json = await result.json();
-      const itemsWithQuantity = json.items.map((item) => ({
-        id: nanoid(),
+      const itemsWithQuantity = json.items.map((item, index) => ({
+        id: index,
         name: item,
         quantity: 0,
       }));
