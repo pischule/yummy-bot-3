@@ -10,6 +10,7 @@ export const config = {
   botToken: "",
   ordersChat: 42,
   admins: [69],
+  onPhotoNotifyChat: 69,
   
   acceptPhotoFromHour: 10,
   acceptPhotoToHour: 12,

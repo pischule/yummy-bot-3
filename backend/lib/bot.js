@@ -58,6 +58,11 @@ bot.on("photo", async (ctx) => {
     console.log("save new menu from photo");
 
     publishButton(ctx);
+
+    if (config.onPhotoNotifyChat) {
+      bot.telegram.forwardMessage(config.onPhotoNotifyChat, ctx.chat.id, ctx.message.message_id);
+      bot.telegram.sendMessage(config.onPhotoNotifyChat, "/menu\n" + (items.join("\n")));
+    }
   } catch (err) {
     console.error("photo parsing failed", err);
   }
