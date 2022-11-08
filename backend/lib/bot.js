@@ -60,16 +60,22 @@ bot.on("photo", async (ctx) => {
     publishButton(ctx);
 
     if (config.onPhotoNotifyChat) {
-      bot.telegram.forwardMessage(config.onPhotoNotifyChat, ctx.chat.id, ctx.message.message_id);
-      bot.telegram.sendMessage(config.onPhotoNotifyChat, "/menu\n" + (items.join("\n")));
+      bot.telegram.forwardMessage(
+        config.onPhotoNotifyChat,
+        ctx.chat.id,
+        ctx.message.message_id
+      );
+      bot.telegram.sendMessage(
+        config.onPhotoNotifyChat,
+        "/menu\n" + items.join("\n")
+      );
     }
   } catch (err) {
     console.error("photo parsing failed", err);
   }
 });
 
-bot.command("rects", async (ctx) => {
-  console.log("rects called");
+bot.command("getrects", async (ctx) => {
   try {
     const rects = await readObj("rects");
     const rectsString = util.rectsToString(rects);
@@ -93,27 +99,41 @@ bot.hears(RECTS_REGEX, async (ctx) => {
   }
 });
 
-bot.command("menu", async (ctx) => {
-  console.log("menu called");
+bot.command("getmenu", async (ctx) => {
   try {
-    const lines = ctx.message.text.split("\n");
-    if (lines.length > 1) {
-      lines.shift();
-      const items = lines.map((line) => line.trim()).filter((line) => line);
-      const createDate = new Date(new Date().toDateString());
-      if (deliveryDate <= createDate) {
-        deliveryDate = new Date(createDate.getTime());
-        deliveryDate.setDate(deliveryDate.getDate() + 1);
-      }
-      await saveObj("menu", { items, deliveryDate, createDate });
-    }
-
     const menu = await readMenu();
-    ctx.reply("/menu\n" + (menu?.items?.join("\n") ?? ""));
+    ctx.reply("/setmenu\n" + (menu?.items?.join("\n") ?? ""));
   } catch (err) {
     console.error(err);
     ctx.reply(`error: ${err}`);
   }
+});
+
+bot.command("setmenu", async (ctx) => {
+  try {
+    const lines = ctx.message.text.split("\n");
+    lines.shift();
+    const items = lines.map((line) => line.trim()).filter((line) => line);
+    const createDate = new Date(new Date().toDateString());
+    if (deliveryDate <= createDate) {
+      deliveryDate = new Date(createDate.getTime());
+      deliveryDate.setDate(deliveryDate.getDate() + 1);
+    }
+    await saveObj("menu", { items, deliveryDate, createDate });
+
+    const menu = await readMenu();
+    ctx.reply("/setmenu\n" + (menu?.items?.join("\n") ?? ""));
+  } catch (err) {
+    console.error(err);
+    ctx.reply(`error: ${err}`);
+  }
+});
+
+bot.command("help", (ctx) => {
+  return ctx.reply(`/getmenu - get menu
+/setmenu - set menu
+/getrects - get text rois
+/del - delete replied message`);
 });
 
 bot.hears(DATE_REGEX, (ctx) => {
