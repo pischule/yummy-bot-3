@@ -67,7 +67,7 @@ bot.on("photo", async (ctx) => {
       );
       bot.telegram.sendMessage(
         config.onPhotoNotifyChat,
-        "/menu\n" + items.join("\n")
+        "/setmenu\n" + items.join("\n")
       );
     }
   } catch (err) {
