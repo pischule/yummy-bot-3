@@ -35,10 +35,11 @@ function MenuScreen(props) {
         {props.items.map((item) => (
           <Item
             key={item.id}
-            id={item.id}
             name={item.name}
             quantity={item.quantity}
-            updateQuantity={props.updateQuantity}
+            updateQuantity={(quantity) =>
+              props.updateQuantity(item.id, quantity)
+            }
           />
         ))}
       </VStack>

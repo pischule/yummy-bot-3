@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 
+import { getMenu } from "./services/menuService";
 import MenuScreen from "./components/Menu/MenuScreen";
 import ConfirmScreen from "./components/Confirm/ConfirmScreen";
 import DoneScreen from "./components/DoneScreen/DoneScreen";
@@ -14,16 +15,12 @@ function App() {
 
   async function fetchData() {
     try {
-      let initData = window.Telegram.WebApp.initData;
-      initData = initData ? "?" + initData : window.location.search;
-      const result = await fetch(
-        `${process.env.REACT_APP_API_URL}/menu${initData}`
-      );
+      const result = await getMenu();
       if (!result.ok) {
         if (result.status === 404) {
           setTitle("Меню не доступно");
         } else if (result.status === 403) {
-          setTitle("Ошибка авторизации");
+          setTitle("Ошибка авторизации 🚨");
         } else {
           setTitle(`Что-то пошло не так 😱`);
         }
@@ -47,29 +44,10 @@ function App() {
     fetchData();
   }, []);
 
-  const updateQuantity = (id, count) => {
-    setItems((prevItems) => {
-      const updatedItems = [...prevItems];
-      const item = updatedItems.find((item) => item.id === id);
-      item.quantity = count;
-      return updatedItems;
-    });
-  };
-
-  const pickRandom = () => {
-    setItems((prevItems) => {
-      let notSelected = prevItems.filter((itm) => itm.quantity === 0);
-      if (notSelected.length === 0) {
-        notSelected = prevItems;
-      }
-      let randomIndex = Math.floor(Math.random() * notSelected.length);
-      let randomId = notSelected[randomIndex].id;
-      return prevItems.map((itm) =>
-        itm.id === randomId
-          ? { ...itm, quantity: itm.quantity + 1 }
-          : { ...itm }
-      );
-    });
+  const updateQuantity = (id, quantity) => {
+    setItems((prevItems) =>
+      prevItems.map((item) => (item.id === id ? { ...item, quantity } : item))
+    );
   };
 
   const switchToConfirem = () => {
@@ -97,7 +75,6 @@ function App() {
         <MenuScreen
           updateQuantity={updateQuantity}
           handleButtonClick={switchToConfirem}
-          handleRandomClick={pickRandom}
           items={items}
           title={title}
         />
