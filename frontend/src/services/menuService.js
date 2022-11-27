@@ -1,8 +1,8 @@
 const baseUrl = process.env.REACT_APP_API_URL;
 
 function getQueryParams() {
-  let initData = window.Telegram.WebApp.initData;
-  return initData ? "?" + initData : window.location.search;
+  const { initData } = window.Telegram.WebApp;
+  return initData ? `?${initData}` : window.location.search;
 }
 
 export async function getMenu() {

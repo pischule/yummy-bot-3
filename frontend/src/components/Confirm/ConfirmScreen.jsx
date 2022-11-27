@@ -1,9 +1,6 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { nanoid } from "nanoid";
-
-import { validateName } from "../../services/nameService";
-import { sendOrder } from "../../services/menuService";
-
 import {
   Button,
   FormControl,
@@ -15,7 +12,10 @@ import {
   UnorderedList,
 } from "@chakra-ui/react";
 
-function ConfirmScreen(props) {
+import validateName from "../../services/nameService";
+import { sendOrder } from "../../services/menuService";
+
+function ConfirmScreen({ items, setError, switchToDone }) {
   const [idempotencyKey] = useState(nanoid());
   const [name, setName] = useState(localStorage.getItem("name") || "");
   const [loading, setLoading] = useState(false);
@@ -31,7 +31,7 @@ function ConfirmScreen(props) {
       setLoading(true);
       const order = {
         name,
-        items: props.items.map((item) => ({
+        items: items.map((item) => ({
           name: item.name,
           quantity: item.quantity,
         })),
@@ -39,12 +39,12 @@ function ConfirmScreen(props) {
       const response = await sendOrder(order, idempotencyKey);
 
       if (response.ok || response.status === 304) {
-        props.switchToDone();
+        switchToDone();
       } else {
-        throw new Error(response.status + "");
+        throw new Error(`${response.status}`);
       }
     } catch (err) {
-      props.setError({
+      setError({
         title: "Ошибка",
         message: err.toString(),
       });
@@ -64,15 +64,15 @@ function ConfirmScreen(props) {
           placeholder="Введите ваше имя"
           onChange={handleNameInputChange}
           value={name}
-        ></Input>
+        />
         {nameError && <FormErrorMessage>{nameError}</FormErrorMessage>}
       </FormControl>
 
       <UnorderedList my={6}>
-        {props.items.map((item) => (
+        {items.map((item) => (
           <ListItem key={item.id}>
             {item.name}
-            {item.quantity === 1 ? "" : " x" + item.quantity}
+            {item.quantity === 1 ? "" : ` x${item.quantity}`}
           </ListItem>
         ))}
       </UnorderedList>
@@ -90,5 +90,16 @@ function ConfirmScreen(props) {
     </>
   );
 }
+
+ConfirmScreen.propTypes = {
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      quantity: PropTypes.number.isRequired,
+    })
+  ).isRequired,
+  setError: PropTypes.func.isRequired,
+  switchToDone: PropTypes.func.isRequired,
+};
 
 export default ConfirmScreen;

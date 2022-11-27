@@ -1,3 +1,5 @@
+import React from "react";
+import PropTypes from "prop-types";
 import {
   Button,
   ButtonGroup,
@@ -46,5 +48,10 @@ function AddItemControls({ quantity, updateQuantity }) {
     </Center>
   );
 }
+
+AddItemControls.propTypes = {
+  quantity: PropTypes.number.isRequired,
+  updateQuantity: PropTypes.func.isRequired,
+};
 
 export default AddItemControls;

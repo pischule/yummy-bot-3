@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { Container } from "@chakra-ui/react";
 
 import { getMenu } from "./services/menuService";
 import MenuScreen from "./components/Menu/MenuScreen";
 import ConfirmScreen from "./components/Confirm/ConfirmScreen";
 import DoneScreen from "./components/DoneScreen/DoneScreen";
 import ErrorModal from "./components/UI/ErrorModal";
-import { Container } from "@chakra-ui/react";
 
 function App() {
   const [screen, setScreen] = useState("menu");

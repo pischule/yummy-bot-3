@@ -1,5 +1,7 @@
-import AddItemControls from "./AddControls";
+import React from "react";
+import PropTypes from "prop-types";
 import { Flex, Spacer, Center } from "@chakra-ui/react";
+import AddItemControls from "./AddControls";
 
 function Item({ name, quantity, updateQuantity }) {
   return (
@@ -10,5 +12,11 @@ function Item({ name, quantity, updateQuantity }) {
     </Flex>
   );
 }
+
+Item.propTypes = {
+  name: PropTypes.string.isRequired,
+  quantity: PropTypes.number.isRequired,
+  updateQuantity: PropTypes.func.isRequired,
+};
 
 export default Item;

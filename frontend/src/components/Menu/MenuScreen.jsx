@@ -1,5 +1,5 @@
-import Item from "./Item";
-
+import React from "react";
+import PropTypes from "prop-types";
 import {
   Button,
   IconButton,
@@ -10,19 +10,19 @@ import {
   Spacer,
   useColorMode,
 } from "@chakra-ui/react";
-
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 
-function MenuScreen(props) {
+import Item from "./Item";
+
+function MenuScreen({ title, items, updateQuantity, handleButtonClick }) {
   const { colorMode, toggleColorMode } = useColorMode();
 
-  const atLeastOneSelected =
-    props.items.filter((i) => i.quantity > 0).length > 0;
+  const atLeastOneSelected = items.filter((i) => i.quantity > 0).length > 0;
 
   return (
     <>
       <Flex>
-        <Heading>{props.title}</Heading>
+        <Heading>{title}</Heading>
         <Spacer />
         <IconButton
           variant="ghost"
@@ -32,24 +32,22 @@ function MenuScreen(props) {
         />
       </Flex>
       <VStack my={4} divider={<StackDivider />}>
-        {props.items.map((item) => (
+        {items.map((item) => (
           <Item
             key={item.id}
             name={item.name}
             quantity={item.quantity}
-            updateQuantity={(quantity) =>
-              props.updateQuantity(item.id, quantity)
-            }
+            updateQuantity={(quantity) => updateQuantity(item.id, quantity)}
           />
         ))}
       </VStack>
-      {props.items.length > 0 && (
+      {items.length > 0 && (
         <Button
           disabled={!atLeastOneSelected}
           size="lg"
           colorScheme="teal"
           width="100%"
-          onClick={props.handleButtonClick}
+          onClick={handleButtonClick}
         >
           Заказать
         </Button>
@@ -57,5 +55,18 @@ function MenuScreen(props) {
     </>
   );
 }
+
+MenuScreen.propTypes = {
+  title: PropTypes.string.isRequired,
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      quantity: PropTypes.number.isRequired,
+    })
+  ).isRequired,
+  updateQuantity: PropTypes.func.isRequired,
+  handleButtonClick: PropTypes.func.isRequired,
+};
 
 export default MenuScreen;

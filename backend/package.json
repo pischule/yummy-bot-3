@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "dev": "nodemon app.js",
     "start": "node app.js"
   },
   "author": "Maksim Pischulenok",
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "@types/jest": "^28.1.6",
-    "jest": "^28.1.3"
+    "jest": "^28.1.3",
+    "nodemon": "^2.0.20"
   }
 }
