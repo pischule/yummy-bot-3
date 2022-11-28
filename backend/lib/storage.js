@@ -1,6 +1,13 @@
 import fs from "fs/promises";
 
+const cache = new Map();
+
 async function readObj(name) {
+  const cached = cache.get(name);
+  if (cached) {
+    return cached;
+  }
+
   try {
     const data = await fs.readFile(`data/${name}.json`, "utf8");
     return JSON.parse(data);
@@ -14,6 +21,7 @@ async function readObj(name) {
 }
 
 function saveObj(name, obj) {
+  cache.set(name, obj);
   return fs.writeFile(`data/${name}.json`, JSON.stringify(obj));
 }
 
