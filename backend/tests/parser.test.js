@@ -122,5 +122,5 @@ describe("abbyy task response parser", () => {
 });
 
 function loadTask(date) {
-  return fs.readFileSync(`test/task/${date}-task.xml`, "utf-8");
+  return fs.readFileSync(`tests/task/${date}-task.xml`, "utf-8");
 }
