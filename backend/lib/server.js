@@ -15,8 +15,9 @@ const corsOptions = {
 
 const app = express();
 app.use(express.json());
+app.use(morgan("combined"));
 app.use(cors(corsOptions));
-app.set('trust proxy', true)
+app.set("trust proxy", true);
 
 const cache = new Set();
 
@@ -32,9 +33,6 @@ function authorizationMiddleware(req, res, next) {
     res.status(403).end();
   }
 }
-
-app.use(morgan("combined"));
-app.use(authorizationMiddleware);
 
 app.get("/menu", async (_req, res, next) => {
   try {
@@ -52,6 +50,12 @@ app.get("/menu", async (_req, res, next) => {
     console.error("/menu", err);
     next(err);
   }
+});
+
+app.use(authorizationMiddleware);
+
+app.head("/auth", (_req, res) => {
+  res.sendStatus(200);
 });
 
 app.post("/order", async (req, res, next) => {

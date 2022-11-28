@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container } from "@chakra-ui/react";
 
-import { getMenu } from "./services/menuService";
+import { getMenu, isLoggedIn } from "./services/menuService";
 import MenuScreen from "./components/Menu/MenuScreen";
 import ConfirmScreen from "./components/Confirm/ConfirmScreen";
 import DoneScreen from "./components/DoneScreen/DoneScreen";
@@ -15,26 +15,36 @@ function App() {
 
   async function fetchData() {
     try {
-      const result = await getMenu();
-      if (!result.ok) {
-        if (result.status === 404) {
+      const menuResponse = await getMenu();
+      if (!menuResponse.ok) {
+        if (menuResponse.status === 404) {
           setTitle("Меню не доступно");
-        } else if (result.status === 403) {
-          setTitle("Ошибка авторизации");
         } else {
           setTitle(`Что-то пошло не так 😱`);
         }
         return;
       }
 
-      const json = await result.json();
-      const itemsWithQuantity = json.items.map((item, index) => ({
-        id: index,
-        name: item,
-        quantity: 0,
-      }));
-      setItems(itemsWithQuantity);
+      const json = await menuResponse.json();
+      setItems(
+        json.items.map((item, index) => ({
+          id: index,
+          name: item,
+          quantity: 0,
+        }))
+      );
       setTitle(json.title);
+
+      isLoggedIn()
+        .then((loggedIn) => {
+          if (loggedIn) return;
+          setTitle("Ошибка авторизации");
+          setItems([]);
+        })
+        .catch(() => {
+          setTitle("Сервер недоступен 😭");
+          setItems([]);
+        });
     } catch (err) {
       setTitle("Сервер недоступен 😭");
     }

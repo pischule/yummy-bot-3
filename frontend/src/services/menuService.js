@@ -5,7 +5,14 @@ function getQueryParams() {
 }
 
 export async function getMenu() {
-  return fetch(`${baseUrl}/menu${getQueryParams()}`);
+  return fetch(`${baseUrl}/menu`);
+}
+
+export async function isLoggedIn() {
+  const { ok } = await fetch(`${baseUrl}/auth${getQueryParams()}`, {
+    method: "HEAD",
+  });
+  return ok;
 }
 
 export async function sendOrder(order, idempotencyKey) {
