@@ -55,6 +55,7 @@ function App() {
   }, []);
 
   const updateQuantity = (id, quantity) => {
+    if (quantity < 0 || quantity > 9) return;
     setItems((prevItems) =>
       prevItems.map((item) => (item.id === id ? { ...item, quantity } : item))
     );
