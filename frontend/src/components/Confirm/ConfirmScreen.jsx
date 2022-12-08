@@ -36,16 +36,16 @@ function ConfirmScreen({ items, setError, switchToDone }) {
         })),
       };
       const response = await sendOrder(order, idempotencyKey);
-
       if (response.ok || response.status === 304) {
         switchToDone();
       } else {
-        throw new Error(`${response.status}`);
+        const { error } = await response.json();
+        throw new Error(error);
       }
     } catch (err) {
       setError({
         title: "Ошибка",
-        message: err.toString(),
+        message: err.message,
       });
     } finally {
       setLoading(false);
