@@ -1,16 +1,13 @@
 import express from "express";
+import "express-async-errors";
 import morgan from "morgan";
 import cors from "cors";
 import { readMenu } from "./storage.js";
 import { publishOrder } from "./bot.js";
-import {
-  checkTelegramAuthentication,
-  checkTelegramAuthenticationWebAppData,
-  weekDayToString,
-} from "./util.js";
+import * as utils from "./util.js";
 
 const corsOptions = {
-  origin: ["https://y.pischule.xyz", "http://dev.com:3000"],
+  origin: ["https://y.pischule.xyz"],
 };
 
 const app = express();
@@ -21,38 +18,21 @@ app.set("trust proxy", true);
 
 const cache = new Set();
 
-function authorizationMiddleware(req, res, next) {
-  if (req.query.query_id && checkTelegramAuthenticationWebAppData(req.query)) {
-    const user = JSON.parse(req.query.user);
-    req.userId = user.id;
-    next();
-  } else if (checkTelegramAuthentication(req.query)) {
-    req.userId = req.query.id;
-    next();
-  } else {
-    res.status(403).end();
+app.get("/menu", async (_req, res) => {
+  const menu = await readMenu();
+  if (menu === null) {
+    res.status(404).end();
+    return;
   }
-}
 
-app.get("/menu", async (_req, res, next) => {
-  try {
-    let menu = await readMenu();
-    if (menu === null) {
-      res.status(404).end();
-      return;
-    }
-
-    res.json({
-      items: menu.items,
-      title: `Меню на ${weekDayToString(menu.deliveryDate.getDay())}`,
-    });
-  } catch (err) {
-    console.error("/menu", err);
-    next(err);
-  }
+  const { items, deliveryDate } = menu;
+  res.json({
+    items,
+    title: `Меню на ${utils.weekDayToString(deliveryDate.getDay())}`,
+  });
 });
 
-app.use(authorizationMiddleware);
+app.use(utils.authMiddleware);
 
 app.head("/auth", (_req, res) => {
   res.sendStatus(200);
@@ -63,16 +43,11 @@ app.post("/order", async (req, res, next) => {
   if (cache.has(idempotencyKey)) {
     return res.status(304).send("Not Modified");
   }
-  try {
-    await publishOrder(req.body, req.userId);
-    if (idempotencyKey) {
-      cache.add(idempotencyKey);
-    }
-    res.status(200).end();
-  } catch (err) {
-    console.error("/order", err);
-    next(err);
+  await publishOrder(req.body, req.userId);
+  if (idempotencyKey) {
+    cache.add(idempotencyKey);
   }
+  res.status(200).end();
 });
 
-export { app };
+export default app;
