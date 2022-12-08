@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { nanoid } from "nanoid";
 import {
   Button,
   FormControl,
@@ -16,7 +15,7 @@ import validateName from "../../services/nameService";
 import { sendOrder } from "../../services/menuService";
 
 function ConfirmScreen({ items, setError, switchToDone }) {
-  const [idempotencyKey] = useState(nanoid());
+  const [idempotencyKey] = useState(crypto.randomUUID());
   const [name, setName] = useState(localStorage.getItem("name") || "");
   const [loading, setLoading] = useState(false);
 
