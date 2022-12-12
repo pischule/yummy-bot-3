@@ -1,15 +1,21 @@
 import { Telegraf } from "telegraf";
 import { config } from "../config/config.js";
-import * as util from "./util.js";
+import * as util from "./utils/util.js";
 import { readObj, saveObj, readMenu } from "./storage.js";
 import { createTaskAndGetDocument } from "./ocrsdk.js";
 import { parseDocument } from "./parser.js";
-import { escapeMarkdown } from "./util.js";
+import { escapeMarkdown } from "./utils/util.js";
 
 const RECTS_REGEX = /.*http.*\?r=([\d.]+).*?/;
 const DATE_REGEX = /.*?меню на.*?(\d{1,2}\.\d{1,2}\.\d{2,4}).*/i;
 
 let deliveryDate = new Date(new Date().toDateString());
+
+function adminOnlyMiddleware(ctx, next) {
+  if (config.admins.includes(ctx.message?.from?.id)) {
+    next();
+  }
+}
 
 const bot = new Telegraf(config.botToken);
 
@@ -179,28 +185,20 @@ function publishOrder(order, userId) {
     const mention = `[${util.escapeMarkdown(
       order.name
     )}](tg://user?id=${userId})`;
-    const items = order.items
-      .map((item) => {
-        if (item.quantity === 1) {
-          return `- ${item.name}`;
-        } else {
-          return `- ${item.name} x${item.quantity}`;
-        }
+    const itemsString = order.items
+      .map(({ name, quantity }) => {
+        const quantityPart = quantity ? ` x${quantity}` : "";
+        return `- ${name}${quantityPart}`;
       })
       .join("\n");
-    const message = `${mention}:\n${escapeMarkdown(items)}`;
+
+    const message = `${mention}:\n${escapeMarkdown(itemsString)}`;
     return bot.telegram.sendMessage(config.ordersChat, message, {
       parse_mode: "MarkdownV2",
     });
   } catch (err) {
     console.error(err);
     throw err;
-  }
-}
-
-function adminOnlyMiddleware(ctx, next) {
-  if (config.admins.includes(ctx.message?.from?.id)) {
-    next();
   }
 }
 

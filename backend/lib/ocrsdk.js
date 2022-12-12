@@ -1,6 +1,13 @@
 import { parseStringPromise } from "xml2js";
 import { config } from "../config/config.js";
-import { getBasicAuthorization, wait } from "./util.js";
+
+function getBasicAuthorization(username, password) {
+  return "Basic " + Buffer.from(username + ":" + password).toString("base64");
+}
+
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 const authorization = getBasicAuthorization(
   config.abbyyUsername,
