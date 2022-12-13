@@ -187,7 +187,7 @@ function publishOrder(order, userId) {
     )}](tg://user?id=${userId})`;
     const itemsString = order.items
       .map(({ name, quantity }) => {
-        const quantityPart = quantity ? ` x${quantity}` : "";
+        const quantityPart = quantity === 1 ? "" : ` x${quantity}`;
         return `- ${name}${quantityPart}`;
       })
       .join("\n");
