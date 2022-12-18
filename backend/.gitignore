@@ -1,5 +1,5 @@
 node_modules
 
-config/config.js
 /data/menu.json
 /data/rects.json
+.env
