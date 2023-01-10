@@ -57,13 +57,25 @@ async function parseDocument(taskString, boxes) {
     }
   }
 
+  const replaces = [
+    ['ка^ша', 'каша'],
+    ['рис^с', 'рис с'],
+    ['гри^ами', 'грибами'],
+    ['бо^цу^', 'борщ с ']
+  ];
+
   // postprocessing
   const itemRegex = /^(.{3,}?)(\(.*)?$/;
   return result
     .map((item) => item.match(itemRegex))
     .filter((match) => match)
     .map((it) => it[1])
-    .map((item) => item.trim().toLowerCase());
+    .map((item) => item.trim().toLocaleLowerCase())
+    .map((item) => {
+      let tempItem = item;
+      replaces.forEach(([from, to]) => tempItem = tempItem.replaceAll(from, to));
+      return tempItem;
+    });
 }
 
 function scaleBoxes(boxes, width, height) {
