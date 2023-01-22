@@ -81,7 +81,7 @@ function App() {
     const selectedItems = items.filter((item) => item.quantity > 0);
 
     return (
-        <Container>
+        <Container my="16px">
             {error && <ErrorModal error={error} onClose={() => setError(null)} />}
             {screen === "menu" && (
                 <MenuScreen
