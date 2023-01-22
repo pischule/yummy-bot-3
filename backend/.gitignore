@@ -3,3 +3,4 @@ node_modules
 /data/menu.json
 /data/rects.json
 .env
+.idea
