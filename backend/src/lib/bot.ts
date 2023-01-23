@@ -1,5 +1,5 @@
 import { Telegraf } from "telegraf";
-import { config } from "../config/config.js";
+import { config } from "../config.js";
 import * as util from "./utils/util.js";
 import { readObj, saveObj, readMenu } from "./storage.js";
 import { createTaskAndGetDocument } from "./ocrsdk.js";
@@ -146,8 +146,8 @@ bot.hears(DATE_REGEX, (ctx) => {
   console.log("heard date regex");
   try {
     const dateString = ctx.message.text.match(DATE_REGEX)[1];
-    const [day, month, year] = dateString.split(".");
-    deliveryDate = new Date(+year, month - 1, +day);
+    const [day, month, year] = dateString.split(".").map(i => +i);
+    deliveryDate = new Date(year, month - 1, day);
   } catch (err) {
     console.error(err);
   }

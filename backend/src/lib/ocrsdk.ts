@@ -1,5 +1,5 @@
 import { parseStringPromise } from "xml2js";
-import { config } from "../config/config.js";
+import { config } from "../config.js";
 
 function getBasicAuthorization(username, password) {
   return "Basic " + Buffer.from(username + ":" + password).toString("base64");

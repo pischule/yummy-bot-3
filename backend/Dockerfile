@@ -6,12 +6,14 @@ WORKDIR /usr/src/app
 
 COPY package.json pnpm-lock.yaml ./
 
-RUN pnpm install -P
+RUN pnpm install
 
 COPY . .
+
+RUN npm run build
 
 ENV NODE_ENV=production
 
 EXPOSE 8080
 
-CMD [ "node", "app.js" ]
+CMD [ "npm", "start" ]

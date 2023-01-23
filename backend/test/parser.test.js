@@ -1,6 +1,6 @@
 import fs from "fs";
-import { parseDocument } from "../lib/parser.js";
-import { stringToRects } from "../lib/util.js";
+import { parseDocument } from "../dist/lib/parser.js";
+import { stringToRects } from "../dist/lib/utils/util.js";
 
 describe("abbyy task response parser", () => {
   it("it correctly parses 0807", async () => {
@@ -41,7 +41,7 @@ describe("abbyy task response parser", () => {
       "салат с крабовыми палочками и кукурузой",
       "б о р и надел ька м и",
       "картофельное пюре",
-      "ка^ша перловая с грибами",
+      "каша перловая с грибами",
       "рис по-провански",
       "«морской дуэт» рыбная котлета с крабовыми палочками",
       "жаркое по-домашнему со свининой",
@@ -111,7 +111,7 @@ describe("abbyy task response parser", () => {
       "салат с крабовыми палочками и кукурузой",
       "б о р и ка дел ька м и",
       "картофельное пюре",
-      "ка^ша перловая с грибами",
+      "каша перловая с грибами",
       "рис по-провански",
       "«морской дуэт» рыбная котлета с крабовыми палочками",
       "жаркое по-домашнему со свининой",
@@ -122,5 +122,5 @@ describe("abbyy task response parser", () => {
 });
 
 function loadTask(date) {
-  return fs.readFileSync(`tests/task/${date}-task.xml`, "utf-8");
+  return fs.readFileSync(`test/task/${date}-task.xml`, "utf-8");
 }

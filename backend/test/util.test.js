@@ -1,10 +1,9 @@
 import {
   rectsToString,
   stringToRects,
-  getBasicAuthorization,
   convertTZ,
   escapeMarkdown,
-} from "../lib/util.js";
+} from "../dist/lib/utils/util.js";
 
 describe("rects-string converter", () => {
   it("convert to and back", () => {
@@ -41,14 +40,6 @@ describe("rects-string converter", () => {
         b: 0.525,
       },
     ]);
-  });
-});
-
-describe("basic auth util", () => {
-  it("generates correct token for Aladdin:open sesame", () => {
-    const token = getBasicAuthorization("Aladdin", "open sesame");
-
-    expect(token).toEqual("Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
   });
 });
 

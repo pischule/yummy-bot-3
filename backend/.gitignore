@@ -4,3 +4,4 @@ node_modules
 /data/rects.json
 .env
 .idea
+dist

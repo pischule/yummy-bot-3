@@ -1,5 +1,5 @@
 import { createHmac, createHash } from "node:crypto";
-import { config } from "../../config/config.js";
+import { config } from "../../config.js";
 
 function checkTelegramAuthentication({ hash, ...userData }) {
   const secretKey = createHash("sha256").update(config.botToken).digest();
