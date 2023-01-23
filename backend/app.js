@@ -12,3 +12,7 @@ process.on("exit", () => {
   app.close();
   bot.stop("exit");
 });
+
+process.on('uncaughtException', (e) => {
+  console.log(e);
+});
