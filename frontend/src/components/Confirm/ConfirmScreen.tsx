@@ -14,14 +14,14 @@ import validateName from "../../services/nameService";
 import {sendOrder} from "../../services/menuService";
 import {ErrorType, ItemType} from "../../services/types";
 
-interface ConfirmScreenProps {
+interface Props {
     items: ItemType[],
     setError: (e: ErrorType) => void,
     switchToDone: () => void
 }
 
 
-const ConfirmScreen: FC<ConfirmScreenProps> = ({items, setError, switchToDone}) => {
+const ConfirmScreen: FC<Props> = ({items, setError, switchToDone}) => {
     const [idempotencyKey] = useState(crypto.randomUUID());
     const [name, setName] = useState(localStorage.getItem("name") || "");
     const [loading, setLoading] = useState(false);

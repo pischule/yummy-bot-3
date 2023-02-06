@@ -3,12 +3,12 @@ import {Box, Button, ButtonGroup, Center, Circle, IconButton,} from "@chakra-ui/
 import {AddIcon, MinusIcon} from "@chakra-ui/icons";
 
 
-interface AddItemControlsProps {
+interface Props {
     quantity: number,
     updateQuantity: (q: number) => void
 }
 
-const AddItemControls: FC<AddItemControlsProps> = ({quantity, updateQuantity}) => {
+const AddItemControls: FC<Props> = ({quantity, updateQuantity}) => {
     return (
         <Center>
             <Circle

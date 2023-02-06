@@ -5,14 +5,14 @@ import {MoonIcon, SunIcon} from "@chakra-ui/icons";
 import Item from "./Item.js";
 import {ItemType} from "../../services/types";
 
-interface MenuScreenProps {
+interface Props {
     title: string,
     items: ItemType[],
     updateQuantity: (id: string, q: number) => void,
     handleButtonClick: () => void
 }
 
-const MenuScreen: FC<MenuScreenProps> = ({title, items, updateQuantity, handleButtonClick}) => {
+const MenuScreen: FC<Props> = ({title, items, updateQuantity, handleButtonClick}) => {
     const {colorMode, toggleColorMode} = useColorMode();
 
     const atLeastOneSelected = items.filter((i) => i.quantity > 0).length > 0;
