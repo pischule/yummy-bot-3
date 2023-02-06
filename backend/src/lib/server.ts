@@ -2,6 +2,7 @@ import express from "express";
 import "express-async-errors";
 import morgan from "morgan";
 import cors from "cors";
+import helmet from "helmet";
 import { readMenu } from "./storage.js";
 import { publishOrder } from "./bot.js";
 import * as utils from "./utils/util.js";
@@ -26,6 +27,8 @@ const orderSchema = Joi.object().keys({
 });
 
 const app = express();
+app.use(helmet())
+app.disable('x-powered-by')
 app.use(express.json());
 app.use(morgan("combined"));
 app.use(cors(corsOptions));
