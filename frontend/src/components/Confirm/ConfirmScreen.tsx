@@ -89,7 +89,7 @@ const ConfirmScreen: FC<Props> = ({items, setError, switchToDone}) => {
                 width="100%"
                 size="lg"
                 onClick={submitOrder}
-                colorScheme="teal"
+                colorScheme="blue"
             >
                 Заказать
             </Button>

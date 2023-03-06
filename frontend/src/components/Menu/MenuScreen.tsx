@@ -43,7 +43,7 @@ const MenuScreen: FC<Props> = ({title, items, updateQuantity, handleButtonClick}
                 <Button
                     isDisabled={!atLeastOneSelected}
                     size="lg"
-                    colorScheme="teal"
+                    colorScheme="blue"
                     width="100%"
                     onClick={handleButtonClick}
                 >

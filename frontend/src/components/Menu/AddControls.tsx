@@ -15,7 +15,7 @@ const AddItemControls: FC<Props> = ({quantity, updateQuantity}) => {
                 visibility={quantity === 0 ? "hidden" : "visible"}
                 size="22px"
                 mx="8px"
-                bg="teal"
+                bg="blue.500"
                 color="white"
             >
                 <Box as="span" fontWeight="bold" fontSize="sm">

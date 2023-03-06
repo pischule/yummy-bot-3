@@ -28,7 +28,7 @@ const ErrorModal: FC<ErrorModalProps> = ({error, onClose}) => {
                     <ModalCloseButton/>
                     <ModalBody>{message}</ModalBody>
                     <ModalFooter>
-                        <Button onClick={onClose} colorScheme="teal">
+                        <Button onClick={onClose} colorScheme="blue">
                             Ок
                         </Button>
                     </ModalFooter>
