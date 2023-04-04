@@ -2,8 +2,6 @@ import { Telegraf } from "telegraf";
 import { config } from "../config.js";
 import * as util from "./utils/util.js";
 import { readObj, saveObj, readMenu } from "./storage.js";
-import { createTaskAndGetDocument } from "./ocrsdk.js";
-import { parseDocument } from "./parser.js";
 import { escapeMarkdown } from "./utils/util.js";
 
 const RECTS_REGEX = /.*http.*\?r=([\d.]+).*?/;
@@ -29,27 +27,7 @@ bot.on("photo", async (ctx) => {
       return;
     }
 
-    await ctx.replyWithChatAction("typing");
-    const rects = await readObj("rects");
-    if (rects == null) {
-      if (ctx.chat.id !== config.ordersChat) {
-        ctx.reply("no rects");
-      }
-      console.error("received photo while not having rects");
-      return;
-    }
-
-    const photo = ctx.message.photo.at(-1);
-    const photoLink = await ctx.telegram.getFileLink(photo);
-    const response = await fetch(photoLink.href);
-
-    const arrayBuffer = await response.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-
-    const document = await createTaskAndGetDocument(buffer);
-    const items = await parseDocument(document, rects);
-    items.push(...config.additionalMenuItems);
-
+    const items = []
     const createDate = new Date(new Date().toDateString());
     if (deliveryDate <= createDate) {
       deliveryDate = new Date(createDate.getTime());
@@ -62,8 +40,6 @@ bot.on("photo", async (ctx) => {
       deliveryDate: deliveryDate,
     });
     console.log("save new menu from photo");
-
-    publishButton(ctx);
 
     if (config.onPhotoNotifyChat) {
       bot.telegram.forwardMessage(
